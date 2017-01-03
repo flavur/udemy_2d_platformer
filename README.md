@@ -1,7 +1,7 @@
 # Udemy Learn To Code By Making a 2D Platformer in Unity
 ~~Section 1:  Introduction <br>~~
 ~~Section 2:  The First Level <br>~~
-Section 3:  The Player <br>
+~~Section 3:  The Player <br>~~
 Section 4:  The Camera <br>
 Section 5:  Dying & Respawning <br>
 Section 6:  Level Pieces <br>
