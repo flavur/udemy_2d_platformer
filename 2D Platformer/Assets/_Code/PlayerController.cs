@@ -2,10 +2,13 @@
 using System.Collections;
 
 public class PlayerController : MonoBehaviour {
+	//Private variables
+	private Rigidbody2D myRigidBody; //Player RigidBody
+	private Animator myAnim; //Holds player animations
 
+	//Public variables
 	public float moveSpeed = 1f; //player move speed
 	public float jumpSpeed = 2f; //Player jump speed
-	private Rigidbody2D myRigidBody; //Player RigidBody
 
 	// Variables used to check whether the player is touching the ground
 	public Transform groundCheck; //Position in space
@@ -16,6 +19,7 @@ public class PlayerController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		myRigidBody = GetComponent<Rigidbody2D>();
+		myAnim = GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
@@ -32,5 +36,9 @@ public class PlayerController : MonoBehaviour {
 		if (Input.GetAxisRaw("Horizontal") == 0f){myRigidBody.velocity = new Vector3(0f,myRigidBody.velocity.y,0f);}
 		// Make the player jump (as long as the player is on the ground)
 		if (Input.GetButtonDown("Jump") && isGrounded){myRigidBody.velocity = new Vector3(myRigidBody.velocity.x,jumpSpeed,0f);}
+
+		//Player Animator values
+		myAnim.SetFloat("Speed",Mathf.Abs(myRigidBody.velocity.x));
+		myAnim.SetBool("Ground",isGrounded);
 	}
 }
