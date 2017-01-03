@@ -29,9 +29,9 @@ public class PlayerController : MonoBehaviour {
 		isGrounded = Physics2D.OverlapCircle(groundCheck.position,groundCheckRadius,whatIsGround);
 
 		// Move the player to the right
-		if (Input.GetAxisRaw("Horizontal") > 0f){myRigidBody.velocity = new Vector3(moveSpeed,myRigidBody.velocity.y,0f);}
+		if (Input.GetAxisRaw("Horizontal") > 0f){myRigidBody.velocity = new Vector3(moveSpeed,myRigidBody.velocity.y,0f); transform.localScale = new Vector3(1f,1f,1f);}
 		// Move the player to the left
-		if (Input.GetAxisRaw("Horizontal") < 0f){myRigidBody.velocity = new Vector3(-moveSpeed,myRigidBody.velocity.y,0f);}
+		if (Input.GetAxisRaw("Horizontal") < 0f){myRigidBody.velocity = new Vector3(-moveSpeed,myRigidBody.velocity.y,0f); transform.localScale = new Vector3(-1f,1f,1f);}
 		// Player shouldn't be moving
 		if (Input.GetAxisRaw("Horizontal") == 0f){myRigidBody.velocity = new Vector3(0f,myRigidBody.velocity.y,0f);}
 		// Make the player jump (as long as the player is on the ground)
