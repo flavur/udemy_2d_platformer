@@ -15,11 +15,13 @@ public class PlayerController : MonoBehaviour {
 	public float groundCheckRadius; //Radius of the groundCheck Position
 	public LayerMask whatIsGround;
 	public bool isGrounded;
+	public Vector3 respawnPosition;
 
 	// Use this for initialization
 	void Start () {
 		myRigidBody = GetComponent<Rigidbody2D>();
 		myAnim = GetComponent<Animator>();
+		respawnPosition = transform.position; //set respawn position to be the initial position of the player
 	}
 	
 	// Update is called once per frame
@@ -51,7 +53,12 @@ public class PlayerController : MonoBehaviour {
 	{
 		if (other.tag == "KillPlane")
 		{
-			gameObject.SetActive(false);
+			// gameObject.SetActive(false);
+			transform.position = respawnPosition;
+		}
+		if (other.tag == "Checkpoint")
+		{
+			respawnPosition = other.transform.position;
 		}
 	}
 }
