@@ -41,4 +41,17 @@ public class PlayerController : MonoBehaviour {
 		myAnim.SetFloat("Speed",Mathf.Abs(myRigidBody.velocity.x));
 		myAnim.SetBool("Ground",isGrounded);
 	}
+	
+	/// <summary>
+	/// Sent when another object enters a trigger collider attached to this
+	/// object (2D physics only).
+	/// </summary>
+	/// <param name="other">The other Collider2D involved in this collision.</param>
+	void OnTriggerEnter2D(Collider2D other)
+	{
+		if (other.tag == "KillPlane")
+		{
+			gameObject.SetActive(false);
+		}
+	}
 }
