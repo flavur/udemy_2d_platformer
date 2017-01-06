@@ -3,7 +3,7 @@
 ~~Section 2:  The First Level <br>~~
 ~~Section 3:  The Player <br>~~
 ~~Section 4:  The Camera <br>~~
-Section 5:  Dying & Respawning <br>
+~~Section 5:  Dying & Respawning <br>~~
 Section 6:  Level Pieces <br>
 Section 7:  User Interface (UI) <br>
 Section 8:  Making Enemies <br>
