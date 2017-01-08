@@ -64,4 +64,32 @@ public class PlayerController : MonoBehaviour {
 			respawnPosition = other.transform.position;
 		}
 	}
+
+	/// <summary>
+	/// Sent when an incoming collider makes contact with this object's
+	/// collider (2D physics only).
+	/// </summary>
+	/// <param name="other">The Collision2D data associated with this collision.</param>
+	void OnCollisionEnter2D(Collision2D other)
+	{
+		//player touches a gameObject with a tag of MovingPlatform then make the player a child of the platform
+		if (other.gameObject.tag == "MovingPlatform")
+		{
+			transform.parent = other.transform;
+		}
+	}
+
+	/// <summary>
+	/// Sent when a collider on another object stops touching this
+	/// object's collider (2D physics only).
+	/// </summary>
+	/// <param name="other">The Collision2D data associated with this collision.</param>
+	void OnCollisionExit2D(Collision2D other)
+	{
+		//player is not touching a gameObject with a tag of MovingPlatform then the player is no longer a child of the platform
+		if (other.gameObject.tag == "MovingPlatform")
+		{
+			transform.parent = null;
+		}
+	}
 }
