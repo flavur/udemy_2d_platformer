@@ -1,17 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI; //only needed when using UI elements
 
 public class LevelManager : MonoBehaviour {
 
 	public float waitToRespawn; //sets how long the wait time for the player respawn should be
 	public PlayerController thePlayer; //grabs the player GameObject
 	public GameObject deathSplosion; //holds the prefab for the death explosion
-
 	public int gemCount; //keeps track of the amount of gems the player has collected
+	public Text gemText;
+
 
 	// Use this for initialization
 	void Start () {
 		thePlayer = FindObjectOfType<PlayerController>();
+		
+		//used to display the gemCount in the UI
+		gemText.text = "Gems: "+ gemCount;
 	}
 	
 	// Update is called once per frame
@@ -45,5 +50,7 @@ public class LevelManager : MonoBehaviour {
 		gemCount+=gemsToAdd;
 		//debug log for displaying amount of gems in the console
 		Debug.Log(gemCount);
+		//used to display the gemCount in the UI
+		gemText.text = "Gems: "+ gemCount;
 	}
 }

@@ -14,16 +14,16 @@ public class PlayerController : MonoBehaviour {
 	public Transform groundCheck; //Position in space
 	public float groundCheckRadius; //Radius of the groundCheck Position
 	public LayerMask whatIsGround;
-	public bool isGrounded;
+	public bool isGrounded; //use to check if the player is grounded
 	public Vector3 respawnPosition;
 	public LevelManager theLevelManager;
 
 	// Use this for initialization
 	void Start () {
-		myRigidBody = GetComponent<Rigidbody2D>();
-		myAnim = GetComponent<Animator>();
+		myRigidBody = GetComponent<Rigidbody2D>(); //grabs the RigidBody component from the player
+		myAnim = GetComponent<Animator>(); //grabs the animation component from the player
 		respawnPosition = transform.position; //set respawn position to be the initial position of the player
-		theLevelManager = FindObjectOfType<LevelManager>();
+		theLevelManager = FindObjectOfType<LevelManager>(); //grabs the LevelManager script
 	}
 	
 	// Update is called once per frame
@@ -33,13 +33,23 @@ public class PlayerController : MonoBehaviour {
 		isGrounded = Physics2D.OverlapCircle(groundCheck.position,groundCheckRadius,whatIsGround);
 
 		// Move the player to the right
-		if (Input.GetAxisRaw("Horizontal") > 0f){myRigidBody.velocity = new Vector3(moveSpeed,myRigidBody.velocity.y,0f); transform.localScale = new Vector3(1f,1f,1f);}
+		if (Input.GetAxisRaw("Horizontal") > 0f){
+			myRigidBody.velocity = new Vector3(moveSpeed,myRigidBody.velocity.y,0f); 
+			transform.localScale = new Vector3(1f,1f,1f);
+			}
 		// Move the player to the left
-		if (Input.GetAxisRaw("Horizontal") < 0f){myRigidBody.velocity = new Vector3(-moveSpeed,myRigidBody.velocity.y,0f); transform.localScale = new Vector3(-1f,1f,1f);}
+		if (Input.GetAxisRaw("Horizontal") < 0f){
+			myRigidBody.velocity = new Vector3(-moveSpeed,myRigidBody.velocity.y,0f); 
+			transform.localScale = new Vector3(-1f,1f,1f);
+			}
 		// Player shouldn't be moving
-		if (Input.GetAxisRaw("Horizontal") == 0f){myRigidBody.velocity = new Vector3(0f,myRigidBody.velocity.y,0f);}
+		if (Input.GetAxisRaw("Horizontal") == 0f){
+			myRigidBody.velocity = new Vector3(0f,myRigidBody.velocity.y,0f);
+			}
 		// Make the player jump (as long as the player is on the ground)
-		if (Input.GetButtonDown("Jump") && isGrounded){myRigidBody.velocity = new Vector3(myRigidBody.velocity.x,jumpSpeed,0f);}
+		if (Input.GetButtonDown("Jump") && isGrounded){
+			myRigidBody.velocity = new Vector3(myRigidBody.velocity.x,jumpSpeed,0f);
+			}
 
 		//Player Animator values
 		myAnim.SetFloat("Speed",Mathf.Abs(myRigidBody.velocity.x));
