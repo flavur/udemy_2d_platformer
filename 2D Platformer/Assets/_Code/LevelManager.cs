@@ -7,6 +7,8 @@ public class LevelManager : MonoBehaviour {
 	public PlayerController thePlayer; //grabs the player GameObject
 	public GameObject deathSplosion; //holds the prefab for the death explosion
 
+	public int gemCount; //keeps track of the amount of gems the player has collected
+
 	// Use this for initialization
 	void Start () {
 		thePlayer = FindObjectOfType<PlayerController>();
@@ -31,8 +33,17 @@ public class LevelManager : MonoBehaviour {
 
 		//tells game to wait for a certain amount of time before resuming
 		yield return new WaitForSeconds(waitToRespawn);
-
+		//Respawns the player to the respawnPosition
 		thePlayer.transform.position = thePlayer.respawnPosition;
+		//reactivates the player in the scene
 		thePlayer.gameObject.SetActive(true);
+	}
+
+	//keeps track of how many coins are added
+	public void addGems(int gemsToAdd){
+		//gemCount + gemsToAdd
+		gemCount+=gemsToAdd;
+		//debug log for displaying amount of gems in the console
+		Debug.Log(gemCount);
 	}
 }
