@@ -8,7 +8,20 @@ public class LevelManager : MonoBehaviour {
 	public PlayerController thePlayer; //grabs the player GameObject
 	public GameObject deathSplosion; //holds the prefab for the death explosion
 	public int gemCount; //keeps track of the amount of gems the player has collected
-	public Text gemText;
+
+	//UI elements
+	public Text gemText; // Gem text display element
+	//Player health UI elements
+	public Image playerHealth1;
+	public Image playerHealth2;
+	public Image playerHealth3;
+	public Sprite aliveSprite;
+	public Sprite deadSprite;
+
+	public int maxHealth;
+	public int healthCount; //keeps track of how much health we have in the game
+
+	private bool checkRespawn;
 
 
 	// Use this for initialization
@@ -17,11 +30,18 @@ public class LevelManager : MonoBehaviour {
 		
 		//used to display the gemCount in the UI
 		gemText.text = "Gems: "+ gemCount;
+
+		healthCount = maxHealth;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+		//Checks if playerhealth is < or = to 0 and kills the player if it that statement is true
+		if (healthCount<=0 && !checkRespawn)
+		{
+			Respawn();
+			checkRespawn = true;
+		}
 	}
 
 	//deactivates the player moves them and then reactivates them
@@ -38,6 +58,11 @@ public class LevelManager : MonoBehaviour {
 
 		//tells game to wait for a certain amount of time before resuming
 		yield return new WaitForSeconds(waitToRespawn);
+
+		//reset playerHealth
+		healthCount = maxHealth;
+		checkRespawn = false;
+		
 		//Respawns the player to the respawnPosition
 		thePlayer.transform.position = thePlayer.respawnPosition;
 		//reactivates the player in the scene
@@ -52,5 +77,10 @@ public class LevelManager : MonoBehaviour {
 		Debug.Log(gemCount);
 		//used to display the gemCount in the UI
 		gemText.text = "Gems: "+ gemCount;
+	}
+
+	//Function to determine how much health the player will lose
+	public void HurtPlayer(int damageToTake){
+		healthCount-=damageToTake;
 	}
 }
