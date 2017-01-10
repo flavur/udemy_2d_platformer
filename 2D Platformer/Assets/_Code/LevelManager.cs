@@ -62,6 +62,7 @@ public class LevelManager : MonoBehaviour {
 		//reset playerHealth
 		healthCount = maxHealth;
 		checkRespawn = false;
+		updateHeartMeter(); //update the player lives UI
 		
 		//Respawns the player to the respawnPosition
 		thePlayer.transform.position = thePlayer.respawnPosition;
@@ -82,5 +83,39 @@ public class LevelManager : MonoBehaviour {
 	//Function to determine how much health the player will lose
 	public void HurtPlayer(int damageToTake){
 		healthCount-=damageToTake;
+		updateHeartMeter();
+	}
+
+	//Updates player health UI
+	public void updateHeartMeter()
+	{
+		switch(healthCount)
+		{
+			case 3: 
+				playerHealth1.sprite = aliveSprite;
+				playerHealth2.sprite = aliveSprite;
+				playerHealth3.sprite = aliveSprite;
+				return;
+			case 2:
+				playerHealth1.sprite = aliveSprite;
+				playerHealth2.sprite = aliveSprite;
+				playerHealth3.sprite = deadSprite;
+				return;
+			case 1:
+				playerHealth1.sprite = aliveSprite;
+				playerHealth2.sprite = deadSprite;
+				playerHealth3.sprite = deadSprite;
+				return;
+			case 0:
+				playerHealth1.sprite = deadSprite;
+				playerHealth2.sprite = deadSprite;
+				playerHealth3.sprite = deadSprite;
+				return;
+			default: 
+				playerHealth1.sprite = deadSprite;
+				playerHealth2.sprite = deadSprite;
+				playerHealth3.sprite = deadSprite;
+				return;
+		}
 	}
 }
