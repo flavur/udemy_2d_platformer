@@ -6,18 +6,19 @@ public class CameraController : MonoBehaviour {
 	public GameObject target; //object that the camera is going to be following
 	public float followAhead = 5f; //amount of distance that the camera will be ahead of the player
 	public float smoothing;
+	public float yOffset; // offset to keeps camera above a certain level when following the player
 
 	private Vector3 targetPosition;
 
 	// Use this for initialization
 	void Start () {
-	
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		//Making the camera follow the target object but keep it y and z positioning
-		targetPosition = new Vector3(target.transform.position.x,transform.position.y,transform.position.z);
+		targetPosition = new Vector3(target.transform.position.x,target.transform.position.y+yOffset,transform.position.z);
 
 		//This will move the camera ahead of the player depending on the characters position
 		//determine if the player is facing right
