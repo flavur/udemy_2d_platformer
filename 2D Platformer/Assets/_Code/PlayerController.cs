@@ -9,7 +9,6 @@ public class PlayerController : MonoBehaviour {
 	//Public variables
 	public float moveSpeed = 1f; //player move speed
 	public float jumpSpeed = 2f; //Player jump speed
-
 	// Variables used to check whether the player is touching the ground
 	public Transform groundCheck; //Position in space
 	public float groundCheckRadius; //Radius of the groundCheck Position
@@ -17,6 +16,7 @@ public class PlayerController : MonoBehaviour {
 	public bool isGrounded; //use to check if the player is grounded
 	public Vector3 respawnPosition;
 	public LevelManager theLevelManager;
+	public GameObject stompBox;
 
 	// Use this for initialization
 	void Start () {
@@ -54,6 +54,17 @@ public class PlayerController : MonoBehaviour {
 		//Player Animator values
 		myAnim.SetFloat("Speed",Mathf.Abs(myRigidBody.velocity.x));
 		myAnim.SetBool("Ground",isGrounded);
+
+		//if the player's direction is going down then set the stompBox active
+		if (myRigidBody.velocity.y < 0)
+		{
+			stompBox.SetActive(true);
+		}
+		//if the players direction is not going down then deactivate the stompBox
+		else
+		{
+			stompBox.SetActive(false);
+		}
 	}
 	
 	/// <summary>
