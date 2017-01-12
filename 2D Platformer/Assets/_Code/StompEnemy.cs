@@ -4,10 +4,13 @@ using System.Collections;
 public class StompEnemy : MonoBehaviour {
 
 	public GameObject deathSplosion;
+	public float bounceAmt;
+
+	private Rigidbody2D playerRigidbody;
 
 	// Use this for initialization
 	void Start () {
-	
+		playerRigidbody = transform.parent.GetComponent<Rigidbody2D>();
 	}
 	
 	// Update is called once per frame
@@ -26,6 +29,7 @@ public class StompEnemy : MonoBehaviour {
 		{
 			Destroy(other.gameObject);
 			Instantiate(deathSplosion,other.transform.position,other.transform.rotation);
+			playerRigidbody.velocity = new Vector3(playerRigidbody.velocity.x,bounceAmt,0f);
 		}
 	}
 }
