@@ -22,6 +22,10 @@ public class LevelManager : MonoBehaviour {
 	public int healthCount; //keeps track of how much health we have in the game
 	public bool invincible;
 
+	public int currentLives;
+	public int startingLives;
+	public Text livesText;
+
 	private bool checkRespawn;
 	//array to hold all the objects that are going to respawn
 	public ResetOnRespawn[] objectsToRespawn;
@@ -37,6 +41,9 @@ public class LevelManager : MonoBehaviour {
 		healthCount = maxHealth;
 
 		objectsToRespawn = FindObjectsOfType<ResetOnRespawn>();
+
+		currentLives = startingLives;
+		livesText.text = "Lives: "+ currentLives;
 	}
 	
 	// Update is called once per frame
@@ -51,7 +58,17 @@ public class LevelManager : MonoBehaviour {
 
 	//deactivates the player moves them and then reactivates them
 	public void Respawn(){
-		StartCoroutine("RespawnCoRoutine");
+		currentLives-=1;
+		livesText.text = "Lives: "+ currentLives;
+
+		if (currentLives > 0)
+		{
+			StartCoroutine("RespawnCoRoutine");	
+		}
+		else
+		{
+			thePlayer.gameObject.SetActive(false);
+		}
 	}
 
 	public IEnumerator RespawnCoRoutine(){
