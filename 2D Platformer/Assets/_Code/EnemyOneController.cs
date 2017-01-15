@@ -37,7 +37,8 @@ public class EnemyOneController : MonoBehaviour {
 	{
 		if (other.tag == "KillPlane")
 		{
-			Destroy(gameObject);
+			//Destroy(gameObject);
+			gameObject.SetActive(false);
 		}
 	}
 }

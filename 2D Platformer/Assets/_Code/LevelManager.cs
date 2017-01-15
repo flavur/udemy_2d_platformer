@@ -22,6 +22,8 @@ public class LevelManager : MonoBehaviour {
 	public int healthCount; //keeps track of how much health we have in the game
 
 	private bool checkRespawn;
+	//array to hold all the objects that are going to respawn
+	public ResetOnRespawn[] objectsToRespawn;
 
 
 	// Use this for initialization
@@ -32,6 +34,8 @@ public class LevelManager : MonoBehaviour {
 		gemText.text = "Gems: "+ gemCount;
 
 		healthCount = maxHealth;
+
+		objectsToRespawn = FindObjectsOfType<ResetOnRespawn>();
 	}
 	
 	// Update is called once per frame

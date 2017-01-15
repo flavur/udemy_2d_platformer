@@ -27,7 +27,8 @@ public class StompEnemy : MonoBehaviour {
 	{
 		if (other.tag == "Enemy")
 		{
-			Destroy(other.gameObject);
+			//Destroy(other.gameObject);
+			other.gameObject.SetActive(false);
 			Instantiate(deathSplosion,other.transform.position,other.transform.rotation);
 			playerRigidbody.velocity = new Vector3(playerRigidbody.velocity.x,bounceAmt,0f);
 		}

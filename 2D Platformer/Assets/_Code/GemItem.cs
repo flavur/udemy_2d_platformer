@@ -26,7 +26,8 @@ public class GemItem : MonoBehaviour {
 	{
 		if (other.tag == "Player")
 		{
-			Destroy(gameObject);
+			//Destroy(gameObject);
+			gameObject.SetActive(false);
 			theLevelManager.addGems(gemValue);
 		}
 	}

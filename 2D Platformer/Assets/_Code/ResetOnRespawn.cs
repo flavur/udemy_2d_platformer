@@ -25,11 +25,7 @@ public class ResetOnRespawn : MonoBehaviour {
 	
 	}
 	
-	/// <summary>
-	/// Reset is called when the user hits the Reset button in the Inspector's
-	/// context menu or when adding the component the first time.
-	/// </summary>
-	void Reset()
+	void ResetObject()
 	{
 		transform.position = startPosition;
 		transform.rotation = startRotation;
