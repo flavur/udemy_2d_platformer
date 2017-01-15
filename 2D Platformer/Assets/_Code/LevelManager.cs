@@ -20,6 +20,7 @@ public class LevelManager : MonoBehaviour {
 
 	public int maxHealth;
 	public int healthCount; //keeps track of how much health we have in the game
+	public bool invincible;
 
 	private bool checkRespawn;
 	//array to hold all the objects that are going to respawn
@@ -95,10 +96,14 @@ public class LevelManager : MonoBehaviour {
 
 	//Function to determine how much health the player will lose
 	public void HurtPlayer(int damageToTake){
-		healthCount-=damageToTake;
-		updateHeartMeter();
 
-		thePlayer.KnockBack();
+		if (!invincible)
+		{
+			healthCount-=damageToTake;
+			updateHeartMeter();
+
+			thePlayer.KnockBack();
+		}
 	}
 
 	//Updates player health UI

@@ -6,6 +6,7 @@ public class PlayerController : MonoBehaviour {
 	private Rigidbody2D myRigidBody; //Player RigidBody
 	private Animator myAnim; //Holds player animations
 	private float knockBackCounter; //counts down the amount of time it takes for us to be knocked back
+	private float invincibilityCounter;
 
 	//Public variables
 	public float moveSpeed = 1f; //player move speed
@@ -20,6 +21,7 @@ public class PlayerController : MonoBehaviour {
 	public GameObject stompBox;
 	public float knockBackForce;
 	public float knockBackLength;
+	public float invincibilityLength;
 
 	// Use this for initialization
 	void Start () {
@@ -61,6 +63,7 @@ public class PlayerController : MonoBehaviour {
 			{
 				myRigidBody.velocity = new Vector3(myRigidBody.velocity.x,jumpSpeed,0f);
 			}
+			theLevelManager.invincible = false;
 		}
 
 		// if the player is getting knocked back then make playe get knocked back
@@ -75,6 +78,15 @@ public class PlayerController : MonoBehaviour {
 			{
 				myRigidBody.velocity = new Vector3(knockBackForce,knockBackForce,0f);
 			}
+		}
+
+		if (invincibilityCounter > 0)
+		{
+			invincibilityCounter-=Time.deltaTime;
+		}
+		if (invincibilityCounter <= 0)
+		{
+			theLevelManager.invincible = false;
 		}
 
 		//Player Animator values
@@ -96,6 +108,8 @@ public class PlayerController : MonoBehaviour {
 	public void KnockBack()
 	{
 		knockBackCounter = knockBackLength;
+		invincibilityCounter = invincibilityLength;
+		theLevelManager.invincible = true;
 	}
 	
 	/// <summary>
