@@ -67,11 +67,20 @@ public class LevelManager : MonoBehaviour {
 		healthCount = maxHealth;
 		checkRespawn = false;
 		updateHeartMeter(); //update the player lives UI
+
+		gemCount = 0;
+		gemText.text = "Gems: "+ gemCount;
 		
 		//Respawns the player to the respawnPosition
 		thePlayer.transform.position = thePlayer.respawnPosition;
 		//reactivates the player in the scene
 		thePlayer.gameObject.SetActive(true);
+
+		for (int i = 0; i < objectsToRespawn.Length; i++)
+		{
+			objectsToRespawn[i].gameObject.SetActive(true);
+			objectsToRespawn[i].ResetObject();
+		}
 	}
 
 	//keeps track of how many coins are added
