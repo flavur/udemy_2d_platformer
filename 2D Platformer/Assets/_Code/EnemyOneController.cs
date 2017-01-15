@@ -41,4 +41,12 @@ public class EnemyOneController : MonoBehaviour {
 			gameObject.SetActive(false);
 		}
 	}
+
+	/// <summary>
+	/// This function is called when the object becomes enabled and active.
+	/// </summary>
+	void OnEnable()
+	{
+		canMove = false;
+	}
 }
