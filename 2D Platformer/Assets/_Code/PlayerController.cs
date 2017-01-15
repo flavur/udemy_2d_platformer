@@ -5,6 +5,7 @@ public class PlayerController : MonoBehaviour {
 	//Private variables
 	private Rigidbody2D myRigidBody; //Player RigidBody
 	private Animator myAnim; //Holds player animations
+	private float knockBackCounter; //counts down the amount of time it takes for us to be knocked back
 
 	//Public variables
 	public float moveSpeed = 1f; //player move speed
@@ -17,6 +18,8 @@ public class PlayerController : MonoBehaviour {
 	public Vector3 respawnPosition;
 	public LevelManager theLevelManager;
 	public GameObject stompBox;
+	public float knockBackForce;
+	public float knockBackLength;
 
 	// Use this for initialization
 	void Start () {
@@ -29,27 +32,50 @@ public class PlayerController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		// Boolean variable that checks whether the player is on the ground or not
-		isGrounded = Physics2D.OverlapCircle(groundCheck.position,groundCheckRadius,whatIsGround);
+		// if the knock back counter isn't above 0 then we able to move
+		if (knockBackCounter <= 0)
+		{
 
-		// Move the player to the right
-		if (Input.GetAxisRaw("Horizontal") > 0f){
-			myRigidBody.velocity = new Vector3(moveSpeed,myRigidBody.velocity.y,0f); 
-			transform.localScale = new Vector3(1f,1f,1f);
+			// Boolean variable that checks whether the player is on the ground or not
+			isGrounded = Physics2D.OverlapCircle(groundCheck.position,groundCheckRadius,whatIsGround);
+
+			// Move the player to the right
+			if (Input.GetAxisRaw("Horizontal") > 0f)
+			{
+				myRigidBody.velocity = new Vector3(moveSpeed,myRigidBody.velocity.y,0f); 
+				transform.localScale = new Vector3(1f,1f,1f);
 			}
-		// Move the player to the left
-		if (Input.GetAxisRaw("Horizontal") < 0f){
-			myRigidBody.velocity = new Vector3(-moveSpeed,myRigidBody.velocity.y,0f); 
-			transform.localScale = new Vector3(-1f,1f,1f);
+			// Move the player to the left
+			if (Input.GetAxisRaw("Horizontal") < 0f)
+			{
+				myRigidBody.velocity = new Vector3(-moveSpeed,myRigidBody.velocity.y,0f); 
+				transform.localScale = new Vector3(-1f,1f,1f);
 			}
-		// Player shouldn't be moving
-		if (Input.GetAxisRaw("Horizontal") == 0f){
-			myRigidBody.velocity = new Vector3(0f,myRigidBody.velocity.y,0f);
+			// Player shouldn't be moving
+			if (Input.GetAxisRaw("Horizontal") == 0f)
+			{
+				myRigidBody.velocity = new Vector3(0f,myRigidBody.velocity.y,0f);
 			}
-		// Make the player jump (as long as the player is on the ground)
-		if (Input.GetButtonDown("Jump") && isGrounded){
-			myRigidBody.velocity = new Vector3(myRigidBody.velocity.x,jumpSpeed,0f);
+			// Make the player jump (as long as the player is on the ground)
+			if (Input.GetButtonDown("Jump") && isGrounded)
+			{
+				myRigidBody.velocity = new Vector3(myRigidBody.velocity.x,jumpSpeed,0f);
 			}
+		}
+
+		// if the player is getting knocked back then make playe get knocked back
+		if (knockBackCounter > 0)
+		{
+			knockBackCounter-=Time.deltaTime;
+			if (transform.localScale.x > 0)
+			{
+				myRigidBody.velocity = new Vector3(-knockBackForce,knockBackForce,0f);	
+			} 
+			else
+			{
+				myRigidBody.velocity = new Vector3(knockBackForce,knockBackForce,0f);
+			}
+		}
 
 		//Player Animator values
 		myAnim.SetFloat("Speed",Mathf.Abs(myRigidBody.velocity.x));
@@ -65,6 +91,11 @@ public class PlayerController : MonoBehaviour {
 		{
 			stompBox.SetActive(false);
 		}
+	}
+
+	public void KnockBack()
+	{
+		knockBackCounter = knockBackLength;
 	}
 	
 	/// <summary>
