@@ -126,6 +126,19 @@ public class LevelManager : MonoBehaviour {
 		}
 	}
 
+	//updates how much health we have
+	public void GetHealth(int healthToGive)
+	{
+		healthCount+=healthToGive;
+
+		if (healthCount > maxHealth)
+		{
+			healthCount = maxHealth;
+		}
+
+		updateHeartMeter();
+	}
+
 	//Updates player health UI
 	public void updateHeartMeter()
 	{
