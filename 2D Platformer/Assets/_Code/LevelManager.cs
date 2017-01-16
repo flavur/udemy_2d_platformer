@@ -20,10 +20,21 @@ public class LevelManager : MonoBehaviour {
 
 	public int maxHealth;
 	public int healthCount; //keeps track of how much health we have in the game
+	public bool invincible;
+	public int bonusLifeThreshold;
 
-	private bool checkRespawn;
+	public int currentLives;
+	public int startingLives;
+	public Text livesText;
+
 	//array to hold all the objects that are going to respawn
 	public ResetOnRespawn[] objectsToRespawn;
+
+	public GameObject gameOverScreen;
+
+	private bool checkRespawn;
+	private int gemBonuslifeCount;
+	
 
 
 	// Use this for initialization
@@ -36,6 +47,9 @@ public class LevelManager : MonoBehaviour {
 		healthCount = maxHealth;
 
 		objectsToRespawn = FindObjectsOfType<ResetOnRespawn>();
+
+		currentLives = startingLives;
+		livesText.text = "Lives: "+ currentLives;
 	}
 	
 	// Update is called once per frame
@@ -46,11 +60,31 @@ public class LevelManager : MonoBehaviour {
 			Respawn();
 			checkRespawn = true;
 		}
+
+		if (gemBonuslifeCount >= bonusLifeThreshold)
+		{
+			//add additional life to the player
+			currentLives+=1;
+			livesText.text = "Lives: "+ currentLives;
+			//reset bonus lif counter
+			gemBonuslifeCount-=bonusLifeThreshold;
+		}
 	}
 
 	//deactivates the player moves them and then reactivates them
 	public void Respawn(){
-		StartCoroutine("RespawnCoRoutine");
+		currentLives-=1;
+		livesText.text = "Lives: "+ currentLives;
+
+		if (currentLives > 0)
+		{
+			StartCoroutine("RespawnCoRoutine");	
+		}
+		else
+		{
+			thePlayer.gameObject.SetActive(false);
+			gameOverScreen.SetActive(true);
+		}
 	}
 
 	public IEnumerator RespawnCoRoutine(){
@@ -70,6 +104,7 @@ public class LevelManager : MonoBehaviour {
 
 		gemCount = 0;
 		gemText.text = "Gems: "+ gemCount;
+		gemBonuslifeCount = 0;
 		
 		//Respawns the player to the respawnPosition
 		thePlayer.transform.position = thePlayer.respawnPosition;
@@ -87,6 +122,7 @@ public class LevelManager : MonoBehaviour {
 	public void addGems(int gemsToAdd){
 		//gemCount + gemsToAdd
 		gemCount+=gemsToAdd;
+		gemBonuslifeCount+=gemsToAdd;
 		//debug log for displaying amount of gems in the console
 		Debug.Log(gemCount);
 		//used to display the gemCount in the UI
@@ -95,7 +131,26 @@ public class LevelManager : MonoBehaviour {
 
 	//Function to determine how much health the player will lose
 	public void HurtPlayer(int damageToTake){
-		healthCount-=damageToTake;
+
+		if (!invincible)
+		{
+			healthCount-=damageToTake;
+			updateHeartMeter();
+
+			thePlayer.KnockBack();
+		}
+	}
+
+	//updates how much health we have
+	public void GetHealth(int healthToGive)
+	{
+		healthCount+=healthToGive;
+
+		if (healthCount > maxHealth)
+		{
+			healthCount = maxHealth;
+		}
+
 		updateHeartMeter();
 	}
 
@@ -130,5 +185,11 @@ public class LevelManager : MonoBehaviour {
 				playerHealth3.sprite = deadSprite;
 				return;
 		}
+	}
+
+	public void AddLives(int livesToAdd)
+	{
+		currentLives += livesToAdd;
+		livesText.text = "Lives: "+ currentLives;
 	}
 }
