@@ -7,7 +7,7 @@
 ~~Section 6:  Level Pieces <br>~~
 ~~Section 7:  User Interface (UI) <br>~~
 ~~Section 8:  Making Enemies <br>~~
-Section 9:  Player Systems <br>
+~~Section 9:  Player Systems <br>~~
 Section 10: Sound <br>
 Section 11: Background <br>
 Section 12: Improving Gameplay <br>
