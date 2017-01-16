@@ -30,6 +30,8 @@ public class LevelManager : MonoBehaviour {
 	//array to hold all the objects that are going to respawn
 	public ResetOnRespawn[] objectsToRespawn;
 
+	public GameObject gameOverScreen;
+
 
 	// Use this for initialization
 	void Start () {
@@ -68,6 +70,7 @@ public class LevelManager : MonoBehaviour {
 		else
 		{
 			thePlayer.gameObject.SetActive(false);
+			gameOverScreen.SetActive(true);
 		}
 	}
 
