@@ -21,16 +21,20 @@ public class LevelManager : MonoBehaviour {
 	public int maxHealth;
 	public int healthCount; //keeps track of how much health we have in the game
 	public bool invincible;
+	public int bonusLifeThreshold;
 
 	public int currentLives;
 	public int startingLives;
 	public Text livesText;
 
-	private bool checkRespawn;
 	//array to hold all the objects that are going to respawn
 	public ResetOnRespawn[] objectsToRespawn;
 
 	public GameObject gameOverScreen;
+
+	private bool checkRespawn;
+	private int gemBonuslifeCount;
+	
 
 
 	// Use this for initialization
@@ -55,6 +59,15 @@ public class LevelManager : MonoBehaviour {
 		{
 			Respawn();
 			checkRespawn = true;
+		}
+
+		if (gemBonuslifeCount >= bonusLifeThreshold)
+		{
+			//add additional life to the player
+			currentLives+=1;
+			livesText.text = "Lives: "+ currentLives;
+			//reset bonus lif counter
+			gemBonuslifeCount-=bonusLifeThreshold;
 		}
 	}
 
@@ -91,6 +104,7 @@ public class LevelManager : MonoBehaviour {
 
 		gemCount = 0;
 		gemText.text = "Gems: "+ gemCount;
+		gemBonuslifeCount = 0;
 		
 		//Respawns the player to the respawnPosition
 		thePlayer.transform.position = thePlayer.respawnPosition;
@@ -108,6 +122,7 @@ public class LevelManager : MonoBehaviour {
 	public void addGems(int gemsToAdd){
 		//gemCount + gemsToAdd
 		gemCount+=gemsToAdd;
+		gemBonuslifeCount+=gemsToAdd;
 		//debug log for displaying amount of gems in the console
 		Debug.Log(gemCount);
 		//used to display the gemCount in the UI
