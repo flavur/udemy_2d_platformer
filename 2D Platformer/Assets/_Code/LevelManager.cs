@@ -138,6 +138,7 @@ public class LevelManager : MonoBehaviour {
 			updateHeartMeter();
 
 			thePlayer.KnockBack();
+			thePlayer.hurtSound.Play();
 		}
 	}
 
