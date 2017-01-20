@@ -9,6 +9,8 @@ public class LevelManager : MonoBehaviour {
 	public GameObject deathSplosion; //holds the prefab for the death explosion
 	public int gemCount; //keeps track of the amount of gems the player has collected
 	public AudioSource pickupSound; //gem sound effect
+	public AudioSource levelMusic;
+	public AudioSource gameOverMusic;
 
 	//UI elements
 	public Text gemText; // Gem text display element
@@ -85,6 +87,8 @@ public class LevelManager : MonoBehaviour {
 		{
 			thePlayer.gameObject.SetActive(false);
 			gameOverScreen.SetActive(true);
+			levelMusic.Stop();
+			gameOverMusic.Play();
 		}
 	}
 
