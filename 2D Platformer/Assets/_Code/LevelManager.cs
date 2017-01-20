@@ -8,6 +8,9 @@ public class LevelManager : MonoBehaviour {
 	public PlayerController thePlayer; //grabs the player GameObject
 	public GameObject deathSplosion; //holds the prefab for the death explosion
 	public int gemCount; //keeps track of the amount of gems the player has collected
+	public AudioSource pickupSound; //gem sound effect
+	public AudioSource levelMusic;
+	public AudioSource gameOverMusic;
 
 	//UI elements
 	public Text gemText; // Gem text display element
@@ -84,6 +87,8 @@ public class LevelManager : MonoBehaviour {
 		{
 			thePlayer.gameObject.SetActive(false);
 			gameOverScreen.SetActive(true);
+			levelMusic.Stop();
+			gameOverMusic.Play();
 		}
 	}
 
@@ -127,6 +132,7 @@ public class LevelManager : MonoBehaviour {
 		Debug.Log(gemCount);
 		//used to display the gemCount in the UI
 		gemText.text = "Gems: "+ gemCount;
+		pickupSound.Play();
 	}
 
 	//Function to determine how much health the player will lose
@@ -138,6 +144,7 @@ public class LevelManager : MonoBehaviour {
 			updateHeartMeter();
 
 			thePlayer.KnockBack();
+			thePlayer.hurtSound.Play();
 		}
 	}
 
@@ -150,7 +157,7 @@ public class LevelManager : MonoBehaviour {
 		{
 			healthCount = maxHealth;
 		}
-
+		pickupSound.Play();
 		updateHeartMeter();
 	}
 
@@ -189,6 +196,7 @@ public class LevelManager : MonoBehaviour {
 
 	public void AddLives(int livesToAdd)
 	{
+		pickupSound.Play();
 		currentLives += livesToAdd;
 		livesText.text = "Lives: "+ currentLives;
 	}
