@@ -7,6 +7,8 @@ public class PlayerController : MonoBehaviour {
 	private Animator myAnim; //Holds player animations
 	private float knockBackCounter; //counts down the amount of time it takes for us to be knocked back
 	private float invincibilityCounter;
+	private bool onPlatform;
+	private float activeMoveSpeed;
 
 	//Public variables
 	public float moveSpeed = 1f; //player move speed
@@ -24,6 +26,7 @@ public class PlayerController : MonoBehaviour {
 	public float invincibilityLength;
 	public AudioSource jumpSound;
 	public AudioSource hurtSound;
+	public float onPlatformSpeedModifier;
 
 	// Use this for initialization
 	void Start () {
@@ -31,28 +34,38 @@ public class PlayerController : MonoBehaviour {
 		myAnim = GetComponent<Animator>(); //grabs the animation component from the player
 		respawnPosition = transform.position; //set respawn position to be the initial position of the player
 		theLevelManager = FindObjectOfType<LevelManager>(); //grabs the LevelManager script
+		activeMoveSpeed = moveSpeed;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
+		// Boolean variable that checks whether the player is on the ground or not
+		isGrounded = Physics2D.OverlapCircle(groundCheck.position,groundCheckRadius,whatIsGround);
+
 		// if the knock back counter isn't above 0 then we able to move
 		if (knockBackCounter <= 0)
 		{
 
-			// Boolean variable that checks whether the player is on the ground or not
-			isGrounded = Physics2D.OverlapCircle(groundCheck.position,groundCheckRadius,whatIsGround);
+			if (onPlatform)
+			{
+				activeMoveSpeed = moveSpeed * onPlatformSpeedModifier;
+			}
+			else
+			{
+				activeMoveSpeed = moveSpeed;
+			}
 
 			// Move the player to the right
 			if (Input.GetAxisRaw("Horizontal") > 0f)
 			{
-				myRigidBody.velocity = new Vector3(moveSpeed,myRigidBody.velocity.y,0f); 
+				myRigidBody.velocity = new Vector3(activeMoveSpeed,myRigidBody.velocity.y,0f); 
 				transform.localScale = new Vector3(1f,1f,1f);
 			}
 			// Move the player to the left
 			if (Input.GetAxisRaw("Horizontal") < 0f)
 			{
-				myRigidBody.velocity = new Vector3(-moveSpeed,myRigidBody.velocity.y,0f); 
+				myRigidBody.velocity = new Vector3(-activeMoveSpeed,myRigidBody.velocity.y,0f); 
 				transform.localScale = new Vector3(-1f,1f,1f);
 			}
 			// Player shouldn't be moving
@@ -145,6 +158,7 @@ public class PlayerController : MonoBehaviour {
 		if (other.gameObject.tag == "MovingPlatform")
 		{
 			transform.parent = other.transform;
+			onPlatform = true;
 		}
 	}
 
@@ -159,6 +173,7 @@ public class PlayerController : MonoBehaviour {
 		if (other.gameObject.tag == "MovingPlatform")
 		{
 			transform.parent = null;
+			onPlatform = false;
 		}
 	}
 }
