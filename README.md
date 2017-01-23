@@ -10,7 +10,7 @@
 ~~Section 9:  Player Systems <br>~~
 ~~Section 10: Sound <br>~~
 ~~Section 11: Background <br>~~
-Section 12: Improving Gameplay <br>
+~~Section 12: Improving Gameplay <br>~~
 Section 13: More Levels <br>
 Section 14: Menus <br>
 Section 15: Boss Battle <br>
