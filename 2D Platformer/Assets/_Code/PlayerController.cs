@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour {
 	//Private variables
-	private Rigidbody2D myRigidBody; //Player RigidBody
+	public Rigidbody2D myRigidBody; //Player RigidBody
 	private Animator myAnim; //Holds player animations
 	private float knockBackCounter; //counts down the amount of time it takes for us to be knocked back
 	private float invincibilityCounter;
@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour {
 	public AudioSource jumpSound;
 	public AudioSource hurtSound;
 	public float onPlatformSpeedModifier;
+	public bool canMove;
 
 	// Use this for initialization
 	void Start () {
@@ -35,6 +36,7 @@ public class PlayerController : MonoBehaviour {
 		respawnPosition = transform.position; //set respawn position to be the initial position of the player
 		theLevelManager = FindObjectOfType<LevelManager>(); //grabs the LevelManager script
 		activeMoveSpeed = moveSpeed;
+		canMove = true;
 	}
 	
 	// Update is called once per frame
@@ -44,7 +46,7 @@ public class PlayerController : MonoBehaviour {
 		isGrounded = Physics2D.OverlapCircle(groundCheck.position,groundCheckRadius,whatIsGround);
 
 		// if the knock back counter isn't above 0 then we able to move
-		if (knockBackCounter <= 0)
+		if (knockBackCounter <= 0 && canMove)
 		{
 
 			if (onPlatform)
