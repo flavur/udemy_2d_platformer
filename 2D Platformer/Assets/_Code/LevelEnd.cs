@@ -51,6 +51,10 @@ public class LevelEnd : MonoBehaviour {
 		theCamera.followTarget = false;
 		// make the player invincible
 		theLevelManager.invincible = true;
+
+		theLevelManager.levelMusic.Stop();
+		theLevelManager.gameOverMusic.Play();
+
 		// resets the players movement to zero
 		thePlayer.myRigidBody.velocity = Vector3.zero;
 
