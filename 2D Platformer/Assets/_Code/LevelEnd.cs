@@ -4,9 +4,11 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class LevelEnd : MonoBehaviour {
-
+	//variable that holds the level that needs to be loaded
 	public string levelToLoad;
+	//variable that holds duration of player not move period - for the coroutine
 	public float waitToMove;
+	//variable that holds duration of wait for load time - for the coroutine
 	public float waitToLoad;
 
 	private PlayerController thePlayer;
