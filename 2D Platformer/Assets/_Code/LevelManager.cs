@@ -43,15 +43,28 @@ public class LevelManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		thePlayer = FindObjectOfType<PlayerController>();
-		
-		//used to display the gemCount in the UI
-		gemText.text = "Gems: "+ gemCount;
 
 		healthCount = maxHealth;
 
 		objectsToRespawn = FindObjectsOfType<ResetOnRespawn>();
 
-		currentLives = startingLives;
+		if (PlayerPrefs.HasKey("GemCount"))
+		{
+			gemCount = PlayerPrefs.GetInt("GemCount");
+		}
+
+		//used to display the gemCount in the UI
+		gemText.text = "Gems: "+ gemCount;
+
+		if (PlayerPrefs.HasKey("PlayerLives"))
+		{
+			currentLives = PlayerPrefs.GetInt("PlayerLives");
+		}
+		else
+		{
+			currentLives = startingLives;			
+		}
+
 		livesText.text = "Lives: "+ currentLives;
 	}
 	

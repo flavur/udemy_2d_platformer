@@ -60,6 +60,10 @@ public class LevelEnd : MonoBehaviour {
 		// resets the players movement to zero
 		thePlayer.myRigidBody.velocity = Vector3.zero;
 
+		//PlayerPrefs are used to permanently store values
+		PlayerPrefs.SetInt("GemCount",theLevelManager.gemCount);
+		PlayerPrefs.SetInt("PlayerLives",theLevelManager.currentLives);
+
 		//tells game to wait for a certain amount of time before resuming
 		yield return new WaitForSeconds(waitToMove);
 		//allows the player to move once the wait time is up
