@@ -2,202 +2,222 @@
 using System.Collections;
 using UnityEngine.UI; //only needed when using UI elements
 
-public class LevelManager : MonoBehaviour {
+public class LevelManager : MonoBehaviour
+{
 
-	public float waitToRespawn; //sets how long the wait time for the player respawn should be
-	public PlayerController thePlayer; //grabs the player GameObject
-	public GameObject deathSplosion; //holds the prefab for the death explosion
-	public int gemCount; //keeps track of the amount of gems the player has collected
-	public AudioSource pickupSound; //gem sound effect
-	public AudioSource levelMusic;
-	public AudioSource gameOverMusic;
+    public float waitToRespawn; //sets how long the wait time for the player respawn should be
+    public PlayerController thePlayer; //grabs the player GameObject
+    public GameObject deathSplosion; //holds the prefab for the death explosion
+    public int gemCount; //keeps track of the amount of gems the player has collected
+    public AudioSource pickupSound; //gem sound effect
+    public AudioSource levelMusic;
+    public AudioSource gameOverMusic;
 
-	//UI elements
-	public Text gemText; // Gem text display element
-	//Player health UI elements
-	public Image playerHealth1;
-	public Image playerHealth2;
-	public Image playerHealth3;
-	public Sprite aliveSprite;
-	public Sprite deadSprite;
+    //UI elements
+    public Text gemText; // Gem text display element
+                         //Player health UI elements
+    public Image playerHealth1;
+    public Image playerHealth2;
+    public Image playerHealth3;
+    public Sprite aliveSprite;
+    public Sprite deadSprite;
 
-	public int maxHealth;
-	public int healthCount; //keeps track of how much health we have in the game
-	public bool invincible;
-	public int bonusLifeThreshold;
+    public int maxHealth;
+    public int healthCount; //keeps track of how much health we have in the game
+    public bool invincible;
+    public int bonusLifeThreshold;
 
-	public int currentLives;
-	public int startingLives;
-	public Text livesText;
+    public int currentLives;
+    public int startingLives;
+    public Text livesText;
 
-	//array to hold all the objects that are going to respawn
-	public ResetOnRespawn[] objectsToRespawn;
+    //array to hold all the objects that are going to respawn
+    public ResetOnRespawn[] objectsToRespawn;
 
-	public GameObject gameOverScreen;
+    public GameObject gameOverScreen;
 
-	private bool checkRespawn;
-	private int gemBonuslifeCount;
-	
+    private bool checkRespawn;
+    private int gemBonuslifeCount;
 
 
-	// Use this for initialization
-	void Start () {
-		thePlayer = FindObjectOfType<PlayerController>();
-		
-		//used to display the gemCount in the UI
-		gemText.text = "Gems: "+ gemCount;
 
-		healthCount = maxHealth;
+    // Use this for initialization
+    void Start()
+    {
+        thePlayer = FindObjectOfType<PlayerController>();
 
-		objectsToRespawn = FindObjectsOfType<ResetOnRespawn>();
+        healthCount = maxHealth;
 
-		currentLives = startingLives;
-		livesText.text = "Lives: "+ currentLives;
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		//Checks if playerhealth is < or = to 0 and kills the player if it that statement is true
-		if (healthCount<=0 && !checkRespawn)
-		{
-			Respawn();
-			checkRespawn = true;
-		}
+        objectsToRespawn = FindObjectsOfType<ResetOnRespawn>();
 
-		if (gemBonuslifeCount >= bonusLifeThreshold)
-		{
-			//add additional life to the player
-			currentLives+=1;
-			livesText.text = "Lives: "+ currentLives;
-			//reset bonus lif counter
-			gemBonuslifeCount-=bonusLifeThreshold;
-		}
-	}
+        if (PlayerPrefs.HasKey("GemCount"))
+        {
+            gemCount = PlayerPrefs.GetInt("GemCount");
+        }
 
-	//deactivates the player moves them and then reactivates them
-	public void Respawn(){
-		currentLives-=1;
-		livesText.text = "Lives: "+ currentLives;
+        //used to display the gemCount in the UI
+        gemText.text = "Gems: " + gemCount;
 
-		if (currentLives > 0)
-		{
-			StartCoroutine("RespawnCoRoutine");	
-		}
-		else
-		{
-			thePlayer.gameObject.SetActive(false);
-			gameOverScreen.SetActive(true);
-			levelMusic.Stop();
-			gameOverMusic.Play();
-		}
-	}
+        if (PlayerPrefs.HasKey("PlayerLives"))
+        {
+            currentLives = PlayerPrefs.GetInt("PlayerLives");
+        }
+        else
+        {
+            currentLives = startingLives;
+        }
 
-	public IEnumerator RespawnCoRoutine(){
-		//deactive the player object
-		thePlayer.gameObject.SetActive(false);
+        livesText.text = "Lives: " + currentLives;
+    }
 
-		//display the character death particle effect
-		Instantiate(deathSplosion,thePlayer.transform.position,thePlayer.transform.rotation);
+    // Update is called once per frame
+    void Update()
+    {
+        //Checks if playerhealth is < or = to 0 and kills the player if it that statement is true
+        if (healthCount <= 0 && !checkRespawn)
+        {
+            Respawn();
+            checkRespawn = true;
+        }
 
-		//tells game to wait for a certain amount of time before resuming
-		yield return new WaitForSeconds(waitToRespawn);
+        if (gemBonuslifeCount >= bonusLifeThreshold)
+        {
+            //add additional life to the player
+            currentLives += 1;
+            livesText.text = "Lives: " + currentLives;
+            //reset bonus lif counter
+            gemBonuslifeCount -= bonusLifeThreshold;
+        }
+    }
 
-		//reset playerHealth
-		healthCount = maxHealth;
-		checkRespawn = false;
-		updateHeartMeter(); //update the player lives UI
+    //deactivates the player moves them and then reactivates them
+    public void Respawn()
+    {
+        currentLives -= 1;
+        livesText.text = "Lives: " + currentLives;
 
-		gemCount = 0;
-		gemText.text = "Gems: "+ gemCount;
-		gemBonuslifeCount = 0;
-		
-		//Respawns the player to the respawnPosition
-		thePlayer.transform.position = thePlayer.respawnPosition;
-		//reactivates the player in the scene
-		thePlayer.gameObject.SetActive(true);
+        if (currentLives > 0)
+        {
+            StartCoroutine("RespawnCoRoutine");
+        }
+        else
+        {
+            thePlayer.gameObject.SetActive(false);
+            gameOverScreen.SetActive(true);
+            levelMusic.Stop();
+            gameOverMusic.Play();
+        }
+    }
 
-		for (int i = 0; i < objectsToRespawn.Length; i++)
-		{
-			objectsToRespawn[i].gameObject.SetActive(true);
-			objectsToRespawn[i].ResetObject();
-		}
-	}
+    public IEnumerator RespawnCoRoutine()
+    {
+        //deactive the player object
+        thePlayer.gameObject.SetActive(false);
 
-	//keeps track of how many coins are added
-	public void addGems(int gemsToAdd){
-		//gemCount + gemsToAdd
-		gemCount+=gemsToAdd;
-		gemBonuslifeCount+=gemsToAdd;
-		//debug log for displaying amount of gems in the console
-		Debug.Log(gemCount);
-		//used to display the gemCount in the UI
-		gemText.text = "Gems: "+ gemCount;
-		pickupSound.Play();
-	}
+        //display the character death particle effect
+        Instantiate(deathSplosion, thePlayer.transform.position, thePlayer.transform.rotation);
 
-	//Function to determine how much health the player will lose
-	public void HurtPlayer(int damageToTake){
+        //tells game to wait for a certain amount of time before resuming
+        yield return new WaitForSeconds(waitToRespawn);
 
-		if (!invincible)
-		{
-			healthCount-=damageToTake;
-			updateHeartMeter();
+        //reset playerHealth
+        healthCount = maxHealth;
+        checkRespawn = false;
+        updateHeartMeter(); //update the player lives UI
 
-			thePlayer.KnockBack();
-			thePlayer.hurtSound.Play();
-		}
-	}
+        gemCount = 0;
+        gemText.text = "Gems: " + gemCount;
+        gemBonuslifeCount = 0;
 
-	//updates how much health we have
-	public void GetHealth(int healthToGive)
-	{
-		healthCount+=healthToGive;
+        //Respawns the player to the respawnPosition
+        thePlayer.transform.position = thePlayer.respawnPosition;
+        //reactivates the player in the scene
+        thePlayer.gameObject.SetActive(true);
 
-		if (healthCount > maxHealth)
-		{
-			healthCount = maxHealth;
-		}
-		pickupSound.Play();
-		updateHeartMeter();
-	}
+        for (int i = 0; i < objectsToRespawn.Length; i++)
+        {
+            objectsToRespawn[i].gameObject.SetActive(true);
+            objectsToRespawn[i].ResetObject();
+        }
+    }
 
-	//Updates player health UI
-	public void updateHeartMeter()
-	{
-		switch(healthCount)
-		{
-			case 3: 
-				playerHealth1.sprite = aliveSprite;
-				playerHealth2.sprite = aliveSprite;
-				playerHealth3.sprite = aliveSprite;
-				return;
-			case 2:
-				playerHealth1.sprite = aliveSprite;
-				playerHealth2.sprite = aliveSprite;
-				playerHealth3.sprite = deadSprite;
-				return;
-			case 1:
-				playerHealth1.sprite = aliveSprite;
-				playerHealth2.sprite = deadSprite;
-				playerHealth3.sprite = deadSprite;
-				return;
-			case 0:
-				playerHealth1.sprite = deadSprite;
-				playerHealth2.sprite = deadSprite;
-				playerHealth3.sprite = deadSprite;
-				return;
-			default: 
-				playerHealth1.sprite = deadSprite;
-				playerHealth2.sprite = deadSprite;
-				playerHealth3.sprite = deadSprite;
-				return;
-		}
-	}
+    //keeps track of how many coins are added
+    public void addGems(int gemsToAdd)
+    {
+        //gemCount + gemsToAdd
+        gemCount += gemsToAdd;
+        gemBonuslifeCount += gemsToAdd;
+        //debug log for displaying amount of gems in the console
+        Debug.Log(gemCount);
+        //used to display the gemCount in the UI
+        gemText.text = "Gems: " + gemCount;
+        pickupSound.Play();
+    }
 
-	public void AddLives(int livesToAdd)
-	{
-		pickupSound.Play();
-		currentLives += livesToAdd;
-		livesText.text = "Lives: "+ currentLives;
-	}
+    //Function to determine how much health the player will lose
+    public void HurtPlayer(int damageToTake)
+    {
+
+        if (!invincible)
+        {
+            healthCount -= damageToTake;
+            updateHeartMeter();
+
+            thePlayer.KnockBack();
+            thePlayer.hurtSound.Play();
+        }
+    }
+
+    //updates how much health we have
+    public void GetHealth(int healthToGive)
+    {
+        healthCount += healthToGive;
+
+        if (healthCount > maxHealth)
+        {
+            healthCount = maxHealth;
+        }
+        pickupSound.Play();
+        updateHeartMeter();
+    }
+
+    //Updates player health UI
+    public void updateHeartMeter()
+    {
+        switch (healthCount)
+        {
+            case 3:
+                playerHealth1.sprite = aliveSprite;
+                playerHealth2.sprite = aliveSprite;
+                playerHealth3.sprite = aliveSprite;
+                return;
+            case 2:
+                playerHealth1.sprite = aliveSprite;
+                playerHealth2.sprite = aliveSprite;
+                playerHealth3.sprite = deadSprite;
+                return;
+            case 1:
+                playerHealth1.sprite = aliveSprite;
+                playerHealth2.sprite = deadSprite;
+                playerHealth3.sprite = deadSprite;
+                return;
+            case 0:
+                playerHealth1.sprite = deadSprite;
+                playerHealth2.sprite = deadSprite;
+                playerHealth3.sprite = deadSprite;
+                return;
+            default:
+                playerHealth1.sprite = deadSprite;
+                playerHealth2.sprite = deadSprite;
+                playerHealth3.sprite = deadSprite;
+                return;
+        }
+    }
+
+    public void AddLives(int livesToAdd)
+    {
+        pickupSound.Play();
+        currentLives += livesToAdd;
+        livesText.text = "Lives: " + currentLives;
+    }
 }
