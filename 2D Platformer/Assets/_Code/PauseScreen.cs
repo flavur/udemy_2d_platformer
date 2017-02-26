@@ -56,11 +56,13 @@ public class PauseScreen : MonoBehaviour
     {
         PlayerPrefs.SetInt("PlayerLives", theLevelManager.currentLives);
         PlayerPrefs.SetInt("GemCount", theLevelManager.gemCount);
+		Time.timeScale = 1f;
         SceneManager.LoadScene(levelSelect);
     }
 
     public void QuitToMain()
     {
+		Time.timeScale = 1f;
         SceneManager.LoadScene(mainMenu);
     }
 }
