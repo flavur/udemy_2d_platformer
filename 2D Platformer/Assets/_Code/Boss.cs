@@ -19,8 +19,10 @@ public class Boss : MonoBehaviour
     public bool takeDamage;
     public int startingHealth;
     public int currentHealth;
+	public GameObject levelExit;
     private float dropCount;
     private float platformCount;
+	private CameraController theCamera;
 
     // Use this for initialization
     void Start()
@@ -32,6 +34,8 @@ public class Boss : MonoBehaviour
         bossRight = true;
 
         currentHealth = startingHealth;
+
+		theCamera = FindObjectOfType<CameraController>();
     }
 
     // Update is called once per frame
@@ -39,6 +43,9 @@ public class Boss : MonoBehaviour
     {
         if (bossActive)
         {
+			theCamera.followTarget = false;
+			theCamera.transform.position = Vector3.Lerp(theCamera.transform.position, new Vector3(transform.position.x, theCamera.transform.position.y,theCamera.transform.position.z),theCamera.smoothing*Time.deltaTime);
+
             theBoss.SetActive(true);
 
             if (dropCount > 0)
@@ -82,24 +89,31 @@ public class Boss : MonoBehaviour
             {
                 currentHealth -= 1;
 
-				//sets the boss position
-				if (bossRight)
-				{
-					theBoss.transform.position = leftPoint.position;
-				}
-				else
-				{
-					theBoss.transform.position = rightPoint.position;
-				}
+                if (currentHealth <= 0)
+                {
+					levelExit.SetActive(true);
+					theCamera.followTarget = true;
+					gameObject.SetActive(false);
+                }
 
-				bossRight = !bossRight;
+                //sets the boss position
+                if (bossRight)
+                {
+                    theBoss.transform.position = leftPoint.position;
+                }
+                else
+                {
+                    theBoss.transform.position = rightPoint.position;
+                }
 
-				rightPlatforms.SetActive(false);
-				leftPlatforms.SetActive(false);
+                bossRight = !bossRight;
 
-				platformCount = waitForPlatforms;
+                rightPlatforms.SetActive(false);
+                leftPlatforms.SetActive(false);
 
-				timeBetweenDrops = timeBetweenDrops/2f;
+                platformCount = waitForPlatforms;
+
+                timeBetweenDrops = timeBetweenDrops / 2f;
 
                 takeDamage = false;
             }
