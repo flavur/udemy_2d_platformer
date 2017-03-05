@@ -20,9 +20,12 @@ public class Boss : MonoBehaviour
     public int startingHealth;
     public int currentHealth;
 	public GameObject levelExit;
+	public bool waitingForRespawn;
     private float dropCount;
+	private float timeBetweenDropStore;
     private float platformCount;
 	private CameraController theCamera;
+	private LevelManager theLevelManager;
 
     // Use this for initialization
     void Start()
@@ -36,11 +39,41 @@ public class Boss : MonoBehaviour
         currentHealth = startingHealth;
 
 		theCamera = FindObjectOfType<CameraController>();
+
+		theLevelManager = FindObjectOfType<LevelManager>();
+		timeBetweenDropStore = timeBetweenDrops;
     }
 
     // Update is called once per frame
     void Update()
     {
+
+		if (theLevelManager.respawnCoActive)
+		{
+			bossActive = false;
+			waitingForRespawn = true;
+		}
+		//resets boss fight when the player dies
+		if (waitingForRespawn && !theLevelManager.respawnCoActive)
+		{
+			theBoss.SetActive(false);
+			leftPlatforms.SetActive(false);
+			rightPlatforms.SetActive(false);
+
+			timeBetweenDrops = timeBetweenDropStore;
+
+			platformCount = waitForPlatforms;
+			dropCount = timeBetweenDrops;
+
+			theBoss.transform.position = rightPoint.position;
+			bossRight = true;
+			currentHealth = startingHealth;
+
+			theCamera.followTarget = true;
+
+			waitingForRespawn = false;
+		}
+
         if (bossActive)
         {
 			theCamera.followTarget = false;
