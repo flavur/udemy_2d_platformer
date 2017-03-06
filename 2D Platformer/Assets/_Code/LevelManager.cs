@@ -36,6 +36,8 @@ public class LevelManager : MonoBehaviour
 
     public GameObject gameOverScreen;
 
+    public bool respawnCoActive;
+
     private bool checkRespawn;
     private int gemBonuslifeCount;
 
@@ -111,6 +113,8 @@ public class LevelManager : MonoBehaviour
 
     public IEnumerator RespawnCoRoutine()
     {
+        respawnCoActive = true;
+
         //deactive the player object
         thePlayer.gameObject.SetActive(false);
 
@@ -119,7 +123,7 @@ public class LevelManager : MonoBehaviour
 
         //tells game to wait for a certain amount of time before resuming
         yield return new WaitForSeconds(waitToRespawn);
-
+        respawnCoActive = false;
         //reset playerHealth
         healthCount = maxHealth;
         checkRespawn = false;
